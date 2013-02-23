@@ -1,12 +1,6 @@
 <?php
 
 class Site {
-
-	// Database connection data
-    public static $database_host = 'DBHOST';
-    public static $database_user = 'DBUSER';
-    public static $database_password = 'DBPASS';
-    public static $database_name = 'DBNAME';
 	
 	// Default action parameters
     public static $default_module = "blog";
@@ -106,7 +100,7 @@ class Site {
         require 'Messager.php';
         // Готовим соединение с базой данных
         require 'DB.php';
-        Site::$db = new DB(Site::$database_host, Site::$database_user, Site::$database_password, Site::$database_name);
+        Site::$db = new DB(DB::HOST, DB::USER, DB::PASSWORD, DB::SCHEMA);
         // Готовим аргументы
 		if (isset($_GET['args'])) {
 			Site::$args = explode("/", $_GET['args']);

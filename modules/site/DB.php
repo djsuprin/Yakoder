@@ -2,6 +2,12 @@
 
 class DB {
 
+	// Database connection data
+	const HOST = 'HOST';
+    const USER = 'USER';
+    const PASSWORD = 'PASSWORD';
+    const SCHEMA = 'SCHEMA';
+
 	private $link;
 	public $lastSelectRowsNumber;
 
