@@ -139,6 +139,7 @@ class Site {
                 	    } else if (isset(Site::$args[$current_args_index])) {
 							$parameters[] = Site::$args[$current_args_index++];
                 	    } else {
+							// сперва проверить, нет ли у параметра значения по умолчанию
 							$noParameterErrors = false;
                 	    }
                 	}
@@ -623,16 +624,12 @@ class Site {
     }
 
     public static function confirmForm($action_confirmed, $caption, $action_denied = '') {
-        echo '
-            <h1>' . $caption . '</h1>
-            <form action="' . $action_confirmed . '" method="GET">
-                <input type="submit" value="Да" />
-            </form>';
+		$parametersConfirmed['action_confirmed'] = $action_confirmed;
+		$parametersConfirmed['caption'] = $caption;
+		$parametersDenied['action_denied'] = $action_denied;
+		Site::displayView('site', 'confirmFormConfirmed.php', $parametersConfirmed);
         if (trim($action_denied) != '') {
-            echo '
-                <form action="' . $action_denied . '" method="GET">
-                    <input type="submit" value="Нет" />
-                </form>';
+            Site::displayView('site', 'confirmFormDenied.php', $parametersDenied);
         }
     }
     

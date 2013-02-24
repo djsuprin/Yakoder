@@ -153,11 +153,14 @@ class Blog {
 	}
 	
 	/** [action] */
-	public static function deletePost() {
-		$post_id = Site::$args[2];
+	public static function deletePost($post_id) {
 		// Проверить, что удаляется именно статья текущего пользователя
 		if (Blog::checkPostOwner($post_id)) {
-			// Необходимо сперва отображать форму подтверждения удаления
+			// удаляем, только если пользователь подтвердил удаление
+			if (!isset(Site::$args[3]) || Site::$args[3] != 'confirmed') {
+				Site::confirmForm('/blog/deletepost/' . $post_id . '/confirmed', 'Вы действительно хотите удалить эту статью?');
+				return;
+			}
 			$was_deleted = Site::$db->query("DELETE FROM posts WHERE id = %d", $post_id);
 			if ($was_deleted) {
 				Site::deleteFromCache('blog_widget');
