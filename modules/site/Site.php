@@ -209,7 +209,7 @@ class Site {
 			// User's login and password are available
 			if ($site_login != '' && $site_password != '') {
 				$users = Site::$db->query("SELECT * FROM users WHERE `login` = '%s' AND `password` = '%s'", $site_login, $site_password);
-				if (mysql_affected_rows() > 0) {
+				if (Site::$db->affectedRows() > 0) {
 					setcookie('site_login', $users[0]['login'], time() + 3600, '/');
 					setcookie('site_password', $users[0]['password'], time() + 3600, '/');					
 					Site::$attrs['id'] = $users[0]['id'];
@@ -265,7 +265,7 @@ class Site {
     private static function fillAttrs() {
         $users = Site::$db->query("SELECT id, name, login, email, avatar FROM users WHERE openid = '%s'",
                 $_SESSION['openid']);
-        if (mysql_affected_rows() <= 0) {
+        if (Site::$db->affectedRows() <= 0) {
             Site::$db->query("INSERT INTO users (openid, name, login, email, avatar, registration_date)
                 VALUES ('%s', '%s', '%s', '%s', '%s', %d)",
                     $_SESSION['openid'], Site::$attrs['namePerson'], Site::$attrs['namePerson/friendly'],
@@ -347,7 +347,7 @@ class Site {
         $users_groups = Site::$db->query("
                 SELECT * FROM `users_groups` LEFT JOIN `groups` ON `groups`.`id` = `users_groups`.`group_id`
                 WHERE `groups`.`caption` = '%s' AND `users_groups`.`user_id` = %d", $group_caption, Site::$attrs['id']);
-        if (mysql_affected_rows() > 0) {
+        if (Site::$db->affectedRows() > 0) {
             return true;
         }
         return false;
@@ -362,7 +362,7 @@ class Site {
                     AND (group_id IN (SELECT group_id FROM users_groups WHERE user_id = %d)
                     OR group_id IN (SELECT id FROM groups WHERE caption = 'Гости'))", 
 				strtolower($action), strtolower($module), Site::$attrs['id']);
-        if (mysql_affected_rows() > 0) {
+        if (Site::$db->affectedRows() > 0) {
             return true;
         } else {
             return false;
@@ -372,7 +372,7 @@ class Site {
     /** [action] */
     public static function userInfo($user_id) {
         $users = Site::$db->query("SELECT * FROM users WHERE id = %d", $user_id);
-        if (mysql_affected_rows() > 0) {
+        if (Site::$db->affectedRows() > 0) {
             $parameters['user'] = $users[0];
             if (trim($users[0]['name']) != '') {
                 $parameters['user']['display_name'] = $users[0]['name'];
@@ -401,7 +401,7 @@ class Site {
     /** [action] */
     public static function profileForm($user_id) {
         $users = Site::$db->query("SELECT * FROM users WHERE id = %d", $user_id);
-        if (mysql_affected_rows() > 0) {
+        if (Site::$db->affectedRows() > 0) {
 			$parameters['user'] = $users[0];
 			Site::displayView('site', 'profile_form.php', $parameters);
         } else {

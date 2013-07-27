@@ -1,5 +1,5 @@
 <?php
-// loading main module which starts the whole thing
+// loading main module
 require 'modules/site/Site.php';
 Site::start();
 ?>

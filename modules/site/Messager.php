@@ -11,7 +11,7 @@ class Messager {
 
     public static function showMessages() {
         $messages = Site::$db->query("SELECT * FROM messages WHERE show_times > 0");
-		if (mysql_affected_rows() > 0) {
+		if (Site::$db->affectedRows() > 0) {
 			Site::displayView('site', 'show_messages.php', $messages);
         }
         Site::$db->query("UPDATE messages SET show_times = show_times - 1 WHERE show_times > 0");

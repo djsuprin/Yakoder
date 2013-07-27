@@ -64,7 +64,7 @@ class Blog {
 			SELECT SQL_CALC_FOUND_ROWS `posts`.*, `users`.email AS author_email, `users`.name AS author_name, `users`.avatar
 			FROM `posts` LEFT JOIN `users` ON `posts`.author_id = `users`.id
 			ORDER BY `posts`.`date` DESC %s", $limit);
-		if (mysql_affected_rows() > 0) {
+		if (Site::$db->affectedRows() > 0) {
 			$posts_count = Site::$db->query("SELECT FOUND_ROWS() AS posts_count");
 			Blog::$posts_count = $posts_count[0]['posts_count'];
 			$parameters['posts'] = $posts;
@@ -181,7 +181,7 @@ class Blog {
             SELECT `posts`.*, `users`.email AS author_email, `users`.name AS author_name, `users`.avatar
             FROM `posts` LEFT JOIN `users` ON `posts`.author_id = `users`.id WHERE `posts`.id = %d
             GROUP BY `posts`.id ORDER BY `posts`.`date` DESC", $post_id);
-        if (mysql_affected_rows() > 0) {
+        if (Site::$db->affectedRows() > 0) {
             Site::$title = $posts[0]['header'];
 			$parameters = $posts[0];
             $parameters['author'] = $posts[0]['author_email'];
@@ -206,7 +206,7 @@ class Blog {
             SELECT SQL_CALC_FOUND_ROWS `posts`.*, `users`.name AS author_name, `users`.email AS author_email, `users`.avatar
             FROM `posts` LEFT JOIN `users` ON `posts`.author_id = `users`.id WHERE `posts`.author_id = %d
             ORDER BY `posts`.`date` DESC %s", $author_id, $limit);
-        if ((Blog::$posts_count = mysql_affected_rows()) > 0) {
+        if ((Blog::$posts_count = Site::$db->affectedRows()) > 0) {
 			$posts_count = Site::$db->query("SELECT FOUND_ROWS() AS posts_count");
 			Blog::$posts_count = $posts_count[0]['posts_count'];
             $parameters['posts'] = $posts;
@@ -228,7 +228,7 @@ class Blog {
             SELECT SQL_CALC_FOUND_ROWS `posts`.*, `users`.name AS author_name, `users`.email AS author_email, `users`.avatar
             FROM `posts` LEFT JOIN `users` ON `posts`.author_id = `users`.id WHERE `posts`.tags LIKE '%%%s%%'
             ORDER BY `posts`.`date` DESC %s", $tag, $limit);
-        if ((Blog::$posts_count = mysql_affected_rows()) > 0) {
+        if ((Blog::$posts_count = Site::$db->affectedRows()) > 0) {
 			$posts_count = Site::$db->query("SELECT FOUND_ROWS() AS posts_count");
 			Blog::$posts_count = $posts_count[0]['posts_count'];
 			$parameters['posts'] = $posts;
@@ -314,7 +314,7 @@ class Blog {
 
     public static function checkPostOwner($post_id) {
         $posts = Site::$db->query("SELECT * FROM posts WHERE id = %d AND author_id = %d", $post_id, Site::$attrs['id']);
-        if (mysql_affected_rows() > 0) {
+        if (Site::$db->affectedRows() > 0) {
             return true;
         } else {
             return false;
