@@ -177,6 +177,7 @@ class Site {
     }
 
     private static function authenticate() {
+        // test change
 		session_start();
         Site::$authorized = false;
 		// Log out was initiated

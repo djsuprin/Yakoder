@@ -58,6 +58,7 @@ class Blog {
     
     /** [action] */
     public static function showPosts() {
+        // test change
 		Blog::setCurrentBlogPageNumber();
 	    $limit = 'LIMIT ' . ((Blog::$page_number - 1) * Blog::$posts_by_page) . ', ' . Blog::$posts_by_page;
 	    $posts = Site::$db->query("

@@ -10,6 +10,7 @@ class Messager {
     }
 
     public static function showMessages() {
+        // test change
         $messages = Site::$db->query("SELECT * FROM messages WHERE show_times > 0");
 		if (Site::$db->affectedRows() > 0) {
 			Site::displayView('site', 'show_messages.php', $messages);
