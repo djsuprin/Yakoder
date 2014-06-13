@@ -28,23 +28,38 @@
 	
 	<div class="post_icon_and_prop">
 		<?if (Blog::checkPostOwner($post['id']) && Site::isAllowed('deletePost', 'Blog')):?>
-		<div class="icon_small post_icon_and_prop">
+		<!--<div class="icon_small post_icon_and_prop">
 			<a href="/Blog/deletePost/<?=$post['id'];?>" title="Удалить">&#x2718;</a>
+		</div>-->
+		<div class="post_icon_and_prop">
+			<a href="/Blog/deletePost/<?=$post['id'];?>"><span class="oi" data-glyph="circle-x" title="Удалить" aria-hidden="true"></span></a>
 		</div>
 		<?endif;?>
 		<?if (Blog::checkPostOwner($post['id']) && Site::isAllowed('editPost', 'Blog')):?>
-		<div class="icon_small post_icon_and_prop">
-			<a href="/Blog/showPostEditForm/<?=$post['id'];?>" title="Редактировать">&#x270e;</a>
+		<div class="post_icon_and_prop">
+			<a href="/Blog/showPostEditForm/<?=$post['id'];?>"><span class="oi" data-glyph="pencil" title="Редактировать" aria-hidden="true"></span></a>
 		</div>
 		<?endif;?>
 		<div class="post_icon_and_prop">
-			<div class="icon_small" style="display: table-cell;">&#xe079;</div>
+			<div style="display: table-cell;">
+				<span class="oi" data-glyph="clock" title="Дата последнего обновления" aria-hidden="true"></span>
+			</div>
 			<div style="padding-left: 5px; display:table-cell; vertical-align: middle;">
 				<nobr><?=date("H:i d.m.Y", $post['edit_date']);?></nobr>
 			</div>
 		</div>
 		<div class="post_icon_and_prop">
-			<div class="icon_small" style="display: table-cell;">&#xe02b;</div>
+			<div style="display: table-cell;">
+				<span class="oi" data-glyph="comment-square" title="Комментарии" aria-hidden="true"></span>
+			</div>
+			<div style="padding-left: 5px; display:table-cell; vertical-align: middle;">
+				<nobr><a href="/Blog/showPost/<?=$post['id'];?>#disqus_thread" data-disqus-identifier="Blog/showPost/<?=$post['id'];?>">Нет комментариев</a></nobr>
+			</div>
+		</div>
+		<div class="post_icon_and_prop">
+			<div style="display: table-cell;">
+				<span class="oi" data-glyph="tag" title="Тэги" aria-hidden="true"></span>
+			</div>
 			<div style="padding-left: 5px; display:table-cell; vertical-align: middle;">
 				<nobr>
 				<?for ($i = 0; $i < count($tags) - 1; $i++):?>
@@ -55,7 +70,9 @@
 			</div>
 		</div>
 		<div class="post_icon_and_prop">
-			<div class="icon_small" style="display: table-cell;">&#xe062;</div>
+			<div style="display: table-cell;">
+				<span class="oi" data-glyph="person" title="Автор" aria-hidden="true"></span>
+			</div>
 			<div style="padding-left: 5px; display:table-cell; vertical-align: middle;">
 				<nobr>
 					<a href="/Site/userInfo/<?=$post['author_id'];?>"><?=$author;?></a>
@@ -81,3 +98,17 @@
 	}
 	Blog::pageNavigator(3);
 ?>
+
+
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'yakoderru'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function () {
+var s = document.createElement('script'); s.async = true;
+s.type = 'text/javascript';
+s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+(document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>

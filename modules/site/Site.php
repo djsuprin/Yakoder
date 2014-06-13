@@ -16,6 +16,9 @@ class Site {
     //public static $timezone = 'Europe/Moscow';
 
     public static $attrs;
+	
+	// this field stores action arguments as string
+	public static $argsString;
     
 	// this field stores array of action arguments, i.e. action /blog/showposts/2 converts to ['blog', 'showposts', '2']
 	public static $args;
@@ -103,7 +106,8 @@ class Site {
         Site::$db = new DB(DB::HOST, DB::USER, DB::PASSWORD, DB::SCHEMA);
         // Готовим аргументы
 		if (isset($_GET['args'])) {
-			Site::$args = explode("/", $_GET['args']);
+			Site::$argsString = $_GET['args'];
+			Site::$args = explode("/", Site::$argsString);
 		}
         // Проводим классическую авторизацию
         Site::authenticate();

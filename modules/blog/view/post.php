@@ -14,17 +14,23 @@
 		</div>
 		<div style="font-size: 14px; padding-left: 20px; display:table-cell; vertical-align: middle;">
 			<div style="margin-bottom: 5px;">
-				<div class="icon_small" style="display: table-cell;">&#xe062;</div>
+				<div style="display: table-cell;">
+					<span class="oi" data-glyph="person" title="Автор" aria-hidden="true"></span>
+				</div>
 				<div style="padding-left: 5px; display:table-cell; vertical-align: middle;">
 					<a href="/Site/userInfo/<?=$parameters['author_id'];?>"><?=$parameters['author'];?></a>
 				</div>
-				<div class="icon_small" style="padding-left: 10px; display: table-cell;">&#xe079;</div>
+				<div style="padding-left: 10px; display: table-cell;">
+					<span class="oi" data-glyph="clock" title="Дата последнего обновления" aria-hidden="true"></span>
+				</div>
 				<div style="padding-left: 5px; display:table-cell; vertical-align: middle;">
 					<?=date("H:i d.m.Y", $parameters['edit_date']);?>
 				</div>
 			</div>
 			<div style="margin-top: 5px;">
-				<div class="icon_small" style="display: table-cell;">&#xe02b;</div>
+				<div style="display: table-cell;">
+					<span class="oi" data-glyph="tag" title="Тэги" aria-hidden="true"></span>
+				</div>
 				<div style="padding-left: 5px; display:table-cell; vertical-align: middle;">
 					<?for ($i = 0; $i < count($parameters['tags']) - 1; $i++):?>
 					<a href="/Blog/showPostsByTag/<?=$parameters['tags'][$i];?>">
@@ -36,13 +42,13 @@
 					</a>
 				</div>
 				<?if (Blog::checkPostOwner($parameters['id']) && Site::isAllowed('editPost', 'Blog')):?>
-				<div class="icon_small" style="padding-left: 10px; display: table-cell;">
-					<a href="/Blog/showPostEditForm/<?=$parameters['id'];?>" title="Редактировать">&#x270e;</a>
+				<div style="padding-left: 10px; display: table-cell;">
+					<a href="/Blog/showPostEditForm/<?=$parameters['id'];?>"><span class="oi" data-glyph="pencil" title="Редактировать" aria-hidden="true"></span></a>
 				</div>
 				<?endif;?>
 				<?if (Blog::checkPostOwner($parameters['id']) && Site::isAllowed('deletePost', 'Blog')):?>
-				<div class="icon_small" style="padding-left: 10px; display: table-cell;">
-					<a href="/Blog/deletePost/<?=$parameters['id'];?>" title="Удалить">&#x2718;</a>
+				<div style="padding-left: 10px; display: table-cell;">
+					<a href="/Blog/deletePost/<?=$parameters['id'];?>" title="Удалить"><span class="oi" data-glyph="circle-x" title="Удалить" aria-hidden="true"></span></a>
 				</div>
 				<?endif;?>
 			</div>
@@ -71,15 +77,23 @@
 </script>
 <?endif;?>
 
+<div id="disqus_thread"></div>
 <script type="text/javascript">
-  VK.init({apiId: 2350245, onlyWidgets: true});
-</script>
+	/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+	var disqus_shortname = 'yakoderru'; // required: replace example with your forum shortname
+	var disqus_identifier = '<?=Site::$argsString;?>';
+	var disqus_title = '<?=$parameters['header'];?>';
 
-<!-- Put this div tag to the place, where the Comments block will be -->
-<div id="vk_comments"></div>
-<script type="text/javascript">
-VK.Widgets.Comments("vk_comments", {limit: 20, width: "300", attach: "*", autoPublish: 0});
-</script> 
+	/* * * DON'T EDIT BELOW THIS LINE * * */
+	(function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
 
 <script src="/js/content_editor.js"></script>
 <script src="/modules/blog/view/js/blog.js"></script>

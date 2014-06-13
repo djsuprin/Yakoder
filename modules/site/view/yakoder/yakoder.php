@@ -8,6 +8,7 @@
     <link rel="icon" href="/favicon.png">
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,700,300&subset=latin,cyrillic-ext' rel='stylesheet' type='text/css'>
     <link type="text/css" href="/modules/site/view/yakoder/css/yakoder.css" rel="stylesheet" />
+	<link type="text/css" href="/modules/site/view/yakoder/css/open-iconic.css" rel="stylesheet" />
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 	<?=Site::$head_code;?>
 </head>
@@ -53,7 +54,7 @@
 </div>
 
 <footer class="row">
-	<div class="twelve columns copyright">&copy; Владимир Васильев, 2013</div>
+	<div class="twelve columns copyright">Владимир Васильев, 2013</div>
 </footer>
 
 <script type="text/javascript" src="/modules/site/view/yakoder/js/google_analytics.js"></script>
