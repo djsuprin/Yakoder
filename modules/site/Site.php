@@ -33,8 +33,9 @@ class Site {
 	// this field stores generated HTML code for main content area
     public static $content;
 	
-	// this field stores html <link> and <script> tags to add JS and CSS code to the page
+	// this fields store html <link> and <script> tags to add JS and CSS code to the page
 	public static $head_code;
+	public static $foot_code;
 	
 	// this field stores function doc comment which should contain special annotations, i.e. [action] or [allowed]
 	public static $annotation_string;
@@ -650,6 +651,12 @@ class Site {
 	public static function addHeadCode($code) {
 		if (strpos(Site::$head_code, $code) === FALSE) {
 			Site::$head_code .= $code;
+		}
+	}
+	
+	public static function addFootCode($code) {
+		if (strpos(Site::$foot_code, $code) === FALSE) {
+			Site::$foot_code .= $code;
 		}
 	}
 	
