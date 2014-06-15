@@ -14,6 +14,8 @@ class Site {
 	
 	// Default timezone
     //public static $timezone = 'Europe/Moscow';
+    
+    public static $cache = false;
 
     public static $attrs;
 	
@@ -50,10 +52,11 @@ class Site {
     }
 	
 	public static function putToCache($key, $data, $overwrite = true) {
-		if (!is_dir($_SERVER['DOCUMENT_ROOT'] . '/cached/')) {
+		/*if (!is_dir($_SERVER['DOCUMENT_ROOT'] . '/cached/')) {
 			mkdir($_SERVER['DOCUMENT_ROOT'] . '/cached/');
 			@chmod($_SERVER['DOCUMENT_ROOT'] . '/cached/', 0777); // TODO change to 0775 and test it!!!
-		}
+		}*/
+		if (!Site::$cache) { return false; }
 		$fileExists = file_exists($_SERVER['DOCUMENT_ROOT'] . '/cached/' . $key . '.html');
 		if (!$fileExists || ($fileExists && $overwrite)) {
 			return file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/cached/' . $key . '.html', $data);
@@ -63,7 +66,7 @@ class Site {
 	}
 	
 	public static function getFromCache($key) {
-		if (file_exists($_SERVER['DOCUMENT_ROOT'] . '/cached/' . $key . '.html')) {
+		if (Site::$cache && file_exists($_SERVER['DOCUMENT_ROOT'] . '/cached/' . $key . '.html')) {
 			$content = file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/cached/' . $key . '.html');
 			return $content;
 		} else {
@@ -583,7 +586,7 @@ class Site {
             foreach ($method_names as $method_name => $group_captions) {
                 foreach ($group_captions as $group_caption => $permission) {
                     Site::$db->query("INSERT INTO `permissions` (`group_id`, `module_name`, `action_name`) VALUES (%d, '%s', '%s')",
-                            $groups[$group_caption], $module_name, $method_name);
+					$groups[$group_caption], $module_name, $method_name);
                 }
             }
         }
@@ -647,6 +650,16 @@ class Site {
     		require $_SERVER['DOCUMENT_ROOT'] . '/modules/' . $module . '/view/' . $view; 
     	}
     }
+    
+    public static function cacheView($cacheName, $module, $view, $parameters = '', $displayCache = false) {
+		ob_start();
+		Site::displayView($module, $view, $parameters);
+		$cachedContent = ob_get_contents();
+		Site::putToCache($cacheName, $cachedContent);
+		if ($displayCache) { ob_end_flush(); }
+		else { ob_end_clean(); }
+		return $cachedContent;
+	}
 	
 	public static function addHeadCode($code) {
 		if (strpos(Site::$head_code, $code) === FALSE) {

@@ -9,9 +9,7 @@ class Blog {
     public static function widget() {
 		// read from cache
 		$widget = Site::getFromCache('blog_widget');
-		if ($widget !== false) {
-			return Site::generateBlock('Популярные темы:', $widget);
-		} else {
+		if ($widget === false) {
 			// generate content
 			$tags = array();
 			$tag_strings = Site::$db->query("SELECT `tags` FROM `posts`");
@@ -36,14 +34,10 @@ class Blog {
 				$parameters[$tag_iter]['size'] = $size;
 				$tag_iter++;
 			}
-			ob_start();
-			Site::displayView('blog', 'blog_widget.php', $parameters);
-			$widget = ob_get_contents();
-			ob_end_clean();
-			// put the content to cache
-			Site::putToCache('blog_widget', $widget);
-			return Site::generateBlock('Популярные темы:', $widget);
+            // cache widget
+            $widget = Site::cacheView('blog_widget', 'blog', 'blog_widget.php', $parameters);
 		}
+        return Site::generateBlock('Популярные темы:', $widget);
     }
 	
 	private static function setCurrentBlogPageNumber() {
@@ -58,21 +52,26 @@ class Blog {
     
     /** [action] */
     public static function showPosts() {
-        // TODO: test change
-		Blog::setCurrentBlogPageNumber();
-	    $limit = 'LIMIT ' . ((Blog::$page_number - 1) * Blog::$posts_by_page) . ', ' . Blog::$posts_by_page;
-	    $posts = Site::$db->query("
-			SELECT SQL_CALC_FOUND_ROWS `posts`.*, `users`.email AS author_email, `users`.name AS author_name, `users`.avatar
-			FROM `posts` LEFT JOIN `users` ON `posts`.author_id = `users`.id
-			ORDER BY `posts`.`date` DESC %s", $limit);
-		if (Site::$db->affectedRows() > 0) {
-			$posts_count = Site::$db->query("SELECT FOUND_ROWS() AS posts_count");
-			Blog::$posts_count = $posts_count[0]['posts_count'];
-			$parameters['posts'] = $posts;
-			Site::displayView('blog', 'post_preview.php', $parameters);
-	    } else {
-	    	Messager::addMessage('Нет статей.');
-		}
+        $cachedContent = Site::getFromCache('blog_posts');
+        if ($cachedContent === false) {
+            // TODO: test change
+            Blog::setCurrentBlogPageNumber();
+            $limit = 'LIMIT ' . ((Blog::$page_number - 1) * Blog::$posts_by_page) . ', ' . Blog::$posts_by_page;
+            $posts = Site::$db->query("
+                SELECT SQL_CALC_FOUND_ROWS `posts`.*, `users`.email AS author_email, `users`.name AS author_name, `users`.avatar
+                FROM `posts` LEFT JOIN `users` ON `posts`.author_id = `users`.id
+                ORDER BY `posts`.`date` DESC %s", $limit);
+            if (Site::$db->affectedRows() > 0) {
+                $posts_count = Site::$db->query("SELECT FOUND_ROWS() AS posts_count");
+                Blog::$posts_count = $posts_count[0]['posts_count'];
+                $parameters['posts'] = $posts;
+                Site::cacheView('blog_posts', 'blog', 'post_preview.php', $parameters, true);
+            } else {
+                Messager::addMessage('Нет статей.');
+            }
+        } else {
+            echo $cachedContent;
+        }
 	}
     
     /** [action] */    
