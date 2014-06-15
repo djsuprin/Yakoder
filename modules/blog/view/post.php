@@ -1,7 +1,3 @@
-<?php 
-	Site::addHeadCode('<script type="text/javascript" src="http://userapi.com/js/api/openapi.js?31"></script>');
-?>
-<script src="/js/content_editor.js"></script>
 <h1><?=$parameters['header'];?></h1>
 <div style="margin: 0 10px 0 10px;">
 	<div id="post-preview-editable" class="post_text"><?=$parameters['preview'];?></div>
@@ -60,7 +56,6 @@
 <?if (Blog::checkPostOwner($parameters['id']) && Site::isAllowed('editPost', 'Blog')):?>
 <script>
 	$(document).ready(function() {
-		console.log('!!!');
 		new ContentEditor($('#post-preview-editable'), function() {
 			$.post('/blog/editPreview/<?=$parameters['id'];?>', {'preview': $('#post-preview-editable').html()},
 			function(data) {

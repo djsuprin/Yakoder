@@ -5,8 +5,6 @@
 </div>
 <?endif;?>
 
-<script src="/js/content_editor.js"></script>
-
 <?php
 	foreach ($parameters['posts'] as $post)
 	{
@@ -112,3 +110,5 @@ s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
 (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
 }());
 </script>
+
+<script src="/js/content_editor.js"></script>
